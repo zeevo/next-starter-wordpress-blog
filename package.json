@@ -1,0 +1,19 @@
+{
+  "name": "next-starter-wordpress-blog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "apollo-fetch": "^0.7.0",
+    "html-react-parser": "^0.13.0",
+    "moment": "^2.27.0",
+    "next": "9.5.1",
+    "node-fetch": "^2.6.0",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  }
+}
