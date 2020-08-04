@@ -6,16 +6,17 @@ import Categories from "./Categories";
 import Feed from "./Feed";
 import Footer from "./Footer";
 
-const Blog = ({ posts, pages, categories, generalSettings, siteMetadata }) => {
+const Blog = ({
+  posts,
+  pages,
+  categories,
+  siteMetadata,
+  title,
+  description,
+}) => {
   const { menu, author, adminUrl, rss } = siteMetadata;
 
-  const { title, description } = generalSettings;
-
   const postNodes = posts.edges.map((edge) => edge.node);
-
-  const categoryNames = categories.nodes
-    .map((node) => node.name)
-    .filter((name) => name !== "Uncategorized");
 
   const fullMenu = pages.edges.map((edge) => edge.node).concat(menu);
 
@@ -24,9 +25,9 @@ const Blog = ({ posts, pages, categories, generalSettings, siteMetadata }) => {
       <Header
         title={parse(title)}
         menu={fullMenu}
-        subtitle={parse(description)}
+        subtitle={description ? parse(description) : null}
       >
-        <Categories categories={categoryNames} />
+        <Categories categories={categories} />
       </Header>
       <main className="container container--narrow js-blog-posts">
         <Feed posts={postNodes} />

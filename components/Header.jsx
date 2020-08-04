@@ -16,7 +16,7 @@ export default function Header(props) {
       <Navbar menu={menu} />
       <section className="header__header container">
         <h1>{title}</h1>
-        <h3 style={{ fontWeight: "normal" }}>{subtitle}</h3>
+        {subtitle ? <h3 style={{ fontWeight: "normal" }}>{subtitle}</h3> : null}
         {date ? moment(date).format("MMMM D, YYYY") : null}
       </section>
       {children}

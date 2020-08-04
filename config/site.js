@@ -1,4 +1,4 @@
-export default {
+const siteConfig = {
   rss: "/rss.xml",
   WPGraphQL: process.env.WP_ADMIN_URL || "https://wp.zeevo.me/graphql",
   adminUrl: process.env.WP_ADMIN_URL || "https://wp.zeevo.me/wp-login",
@@ -17,6 +17,8 @@ export default {
     name: "Shane O'Neill",
     twitter: "https://twitter.com/zeevosec",
     github: "https://github.com/zeevosec",
-    avatar: "/icon.png",
+    avatar: "/avatar.png",
   },
 };
+
+export default siteConfig;

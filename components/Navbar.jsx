@@ -16,7 +16,6 @@ const Navbar = (props) => (
             </a>
           );
         }
-        console.log(props);
         return (
           <Link key={i} href={item.uri}>
             <a className="header__item__link fade hide-mobile">{item.title}</a>

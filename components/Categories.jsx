@@ -5,7 +5,7 @@ const Filter = (props) => {
   const { topic } = props;
   return (
     <li className="header__tab">
-      <Link href={`/categories/${topic.toLowerCase()}`}>
+      <Link href={`/category/${topic.toLowerCase()}`}>
         <a className="header__tab__link faded faded--60">{topic}</a>
       </Link>
     </li>

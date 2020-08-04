@@ -12,6 +12,10 @@ const IndexRoute = ({ siteMetadata, data }) => {
   const { posts, pages, categories, generalSettings } = data;
   const { title, description } = generalSettings;
 
+  const categoryNames = categories.nodes
+    .map((node) => node.name)
+    .filter((name) => name !== "Uncategorized");
+
   return (
     <Layout>
       <div>
@@ -23,7 +27,9 @@ const IndexRoute = ({ siteMetadata, data }) => {
         <Blog
           posts={posts}
           pages={pages}
-          categories={categories}
+          categories={categoryNames}
+          title={title}
+          description={description}
           generalSettings={generalSettings}
           siteMetadata={siteMetadata}
         />

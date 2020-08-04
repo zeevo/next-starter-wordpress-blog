@@ -2,16 +2,16 @@ import React from "react";
 import Head from "next/head";
 
 import parse from "html-react-parser";
-
-import Layout from "../../components/Layout";
-import { getSiteMetadata } from "../../lib/site";
 import { createApolloFetch } from "apollo-fetch";
-import Blog from "../../components/Blog";
 
-function TagTemplate({ siteMetadata, data, params }) {
-  const { generalSettings, posts, pages, categories } = data;
+import { getSiteMetadata } from "../lib/site";
+
+import Layout from "../components/Layout";
+import PageTemplateDetails from "../components/PageTemplateDetails";
+
+function PageTemplate({ siteMetadata, data, params }) {
+  const { generalSettings, page, pages, categories } = data;
   const { title } = generalSettings;
-  const { category } = params;
 
   const categoryNames = categories.nodes
     .map((node) => node.name)
@@ -22,13 +22,12 @@ function TagTemplate({ siteMetadata, data, params }) {
       <div>
         <Head>
           <title>{`${category} - ${parse(title)}`}</title>
-          <meta name="description" content={`${title} - ${category}`} />
+          <meta name="description" content={`${title} - ${page.title}`} />
         </Head>
-        <Blog
-          posts={posts}
+        <PageTemplateDetails
+          page={page}
           pages={pages}
           categories={categoryNames}
-          title={category}
           siteMetadata={siteMetadata}
         />
       </div>
@@ -41,60 +40,37 @@ export const getStaticPaths = async () => {
   const uri = siteMetadata.WPGraphQL;
 
   const query = `
-  query Categories {
-    categories {
-      nodes {
-        name
+  {
+    pages {
+      edges {
+        node {
+          id
+          slug
+        }
       }
     }
   }
-    `;
+  `;
 
   const fetch = createApolloFetch({ uri });
   const { data } = await fetch({ query });
 
   return {
-    paths: data.categories.nodes.map((node) => ({
-      params: { category: node.name.toLowerCase() },
-    })),
+    paths: data.pages.edges.map(({ node }) => {
+      console.log(node);
+      return { params: { page: node.slug } };
+    }),
     fallback: false,
   };
 };
-
 export const getStaticProps = async ({ params }) => {
   const siteMetadata = getSiteMetadata();
   const uri = siteMetadata.WPGraphQL;
   const query = `
-  query($category: String!) {
+  query ($slug: String!) {
     generalSettings {
       title
       description
-    }
-    posts(where: {categoryName: $category}) {
-      edges {
-        node {
-          title
-          date
-          excerpt
-          slug
-          author {
-            node {
-              name
-            }
-          }
-          categories {
-            nodes {
-              name
-            }
-          }
-          featuredImage {
-            node {
-              sourceUrl
-              title
-            }
-          }
-        }
-      }
     }
     pages {
       edges {
@@ -113,18 +89,18 @@ export const getStaticProps = async ({ params }) => {
 `;
 
   const fetch = createApolloFetch({ uri });
-  const { data } = await fetch({
+  const res = await fetch({
     query,
-    variables: { category: params.category },
+    variables: { id: params.id },
   });
 
   return {
     props: {
-      data,
+      data: res.data,
       siteMetadata,
       params,
     },
   };
 };
 
-export default CategoryTemplate;
+export default PageTemplate;
