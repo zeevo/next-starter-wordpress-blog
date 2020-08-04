@@ -1,12 +1,12 @@
-import React from "react";
-import Head from "next/head";
+import React from 'react';
+import Head from 'next/head';
 
-import parse from "html-react-parser";
-import { createApolloFetch } from "apollo-fetch";
+import parse from 'html-react-parser';
+import { createApolloFetch } from 'apollo-fetch';
 
-import Layout from "../../components/Layout";
-import { getSiteMetadata } from "../../lib/site";
-import Blog from "../../components/Blog";
+import Layout from '../../components/Layout';
+import { getSiteMetadata } from '../../lib/site';
+import Blog from '../../components/Blog';
 
 function CategoryTemplate({ siteMetadata, data, params }) {
   const { generalSettings, posts, pages, categories } = data;
@@ -15,7 +15,7 @@ function CategoryTemplate({ siteMetadata, data, params }) {
 
   const categoryNames = categories.nodes
     .map((node) => node.name)
-    .filter((name) => name !== "Uncategorized");
+    .filter((name) => name !== 'Uncategorized');
 
   return (
     <Layout>
