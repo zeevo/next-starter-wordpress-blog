@@ -2,13 +2,13 @@ import React from 'react';
 import Head from 'next/head';
 
 import parse from 'html-react-parser';
-import { createApolloFetch } from 'apollo-fetch';
-
-import { getSiteMetadata } from '../lib/site';
+import { request } from 'graphql-request';
 
 import Layout from '../components/Layout';
 import PageTemplateDetails from '../components/PageTemplateDetails';
+
 import { getPageBySlug } from '../lib/page';
+import { getSiteMetadata } from '../lib/site';
 
 function PageTemplate({ siteMetadata, data }) {
   const { generalSettings, page, pages, categories } = data;
@@ -37,72 +37,72 @@ function PageTemplate({ siteMetadata, data }) {
 }
 
 export const getStaticPaths = async () => {
-  const siteMetadata = getSiteMetadata();
-  const uri = siteMetadata.WPGraphQL;
+  try {
+    const siteMetadata = getSiteMetadata();
+    const wpgraphql = siteMetadata.WPGraphQL;
 
-  const query = `
-  {
-    pages {
-      edges {
-        node {
-          id
-          slug
+    const query = /* GraphQL */ `
+      {
+        pages {
+          edges {
+            node {
+              id
+              slug
+            }
+          }
         }
       }
-    }
+    `;
+    const data = await request(wpgraphql, query);
+
+    return {
+      paths: data.pages.edges.map(({ node }) => {
+        return { params: { page: node.slug } };
+      }),
+      fallback: false,
+    };
+  } catch (e) {
+    console.log(e);
   }
-  `;
-
-  const fetch = createApolloFetch({ uri });
-  const { data } = await fetch({ query });
-
-  return {
-    paths: data.pages.edges.map(({ node }) => {
-      return { params: { page: node.slug } };
-    }),
-    fallback: false,
-  };
 };
 export const getStaticProps = async ({ params }) => {
-  const siteMetadata = getSiteMetadata();
-  const uri = siteMetadata.WPGraphQL;
-  const query = `
-  query {
-    generalSettings {
-      title
-      description
-    }
-    pages {
-      edges {
-        node {
-          uri
+  try {
+    const siteMetadata = getSiteMetadata();
+    const wpgraphql = siteMetadata.WPGraphQL;
+    const query = /* GraphQL */ `
+      query {
+        generalSettings {
           title
+          description
+        }
+        pages {
+          edges {
+            node {
+              uri
+              title
+            }
+          }
+        }
+        categories {
+          nodes {
+            name
+          }
         }
       }
-    }
-    categories {
-      nodes {
-        name
-      }
-    }
+    `;
+
+    const data = await request(wpgraphql, query, { id: params.id });
+    const page = await getPageBySlug(params.page);
+    return {
+      props: {
+        data: { ...data, page },
+        siteMetadata,
+        params,
+      },
+    };
+  } catch (e) {
+    console.log(e);
   }
-`;
-
-  const fetch = createApolloFetch({ uri });
-  const res = await fetch({
-    query,
-    variables: { id: params.id },
-  });
-
-  const page = await getPageBySlug(params.page);
-
-  return {
-    props: {
-      data: { ...res.data, page },
-      siteMetadata,
-      params,
-    },
-  };
 };
 
 export default PageTemplate;

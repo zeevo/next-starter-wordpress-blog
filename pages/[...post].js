@@ -6,6 +6,7 @@ import { request } from 'graphql-request';
 
 import Layout from '../components/Layout';
 import PostTemplateDetails from '../components/PostTemplateDetails';
+
 import { getPostByUri, getPostPaths } from '../lib/post';
 import { getSiteMetadata } from '../lib/site';
 

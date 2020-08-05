@@ -8,13 +8,20 @@ const Navbar = props => (
       {props.menu.map((item, i) => {
         if (item.external) {
           return (
-            <a key={i} href={item.uri} className="header__item__link fade hide-mobile">
+            <a key={item.uri} href={item.uri} className="header__item__link fade hide-mobile">
               {item.title}
             </a>
           );
         }
+        if (item.uri !== '/') {
+          return (
+            <Link key={item.uri} href="/[page]" as={item.uri}>
+              <a className="header__item__link fade hide-mobile">{item.title}</a>
+            </Link>
+          );
+        }
         return (
-          <Link key={i} href={item.uri}>
+          <Link key={item.uri} href="/">
             <a className="header__item__link fade hide-mobile">{item.title}</a>
           </Link>
         );

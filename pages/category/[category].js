@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 
 import parse from 'html-react-parser';
-import { createApolloFetch } from 'apollo-fetch';
+import { request } from 'graphql-request';
 
 import Layout from '../../components/Layout';
 import { getSiteMetadata } from '../../lib/site';
@@ -38,20 +38,19 @@ function CategoryTemplate({ siteMetadata, data, params }) {
 
 export const getStaticPaths = async () => {
   const siteMetadata = getSiteMetadata();
-  const uri = siteMetadata.WPGraphQL;
+  const wpgraphql = siteMetadata.WPGraphQL;
 
-  const query = `
-  query Categories {
-    categories {
-      nodes {
-        name
+  const query = /* GraphQL */ `
+    query Categories {
+      categories {
+        nodes {
+          name
+        }
       }
     }
-  }
-    `;
+  `;
 
-  const fetch = createApolloFetch({ uri });
-  const { data } = await fetch({ query });
+  const data = await request(wpgraphql, query);
 
   return {
     paths: data.categories.nodes.map(node => ({
@@ -64,8 +63,9 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }) => {
+  console.log(params);
   const siteMetadata = getSiteMetadata();
-  const uri = siteMetadata.WPGraphQL;
+  const wpgraphql = siteMetadata.WPGraphQL;
   const query = /* GraphQl */ `
   query ($category: String!) {
     generalSettings {
@@ -114,12 +114,7 @@ export const getStaticProps = async ({ params }) => {
   }
   `;
 
-  const fetch = createApolloFetch({ uri });
-  const { data } = await fetch({
-    query,
-    variables: { category: params.category },
-  });
-
+  const data = await request(wpgraphql, query, { category: params.category });
   return {
     props: {
       data,

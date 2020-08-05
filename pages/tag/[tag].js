@@ -11,7 +11,7 @@ import Blog from '../../components/Blog';
 function TagTemplate({ siteMetadata, data, params }) {
   const { generalSettings, posts, pages, categories } = data;
   const { title } = generalSettings;
-  const { category } = params;
+  const { tag } = params;
 
   const categoryNames = categories.nodes
     .map(node => node.name)
@@ -22,13 +22,13 @@ function TagTemplate({ siteMetadata, data, params }) {
       <div>
         <Head>
           <title>{`${params.tag} - ${parse(title)}`}</title>
-          <meta name="description" content={`${title} - ${category}`} />
+          <meta name="description" content={`${title} - ${tag}`} />
         </Head>
         <Blog
           posts={posts}
           pages={pages}
           categories={categoryNames}
-          title={category}
+          title={`Tagged: ${tag}`}
           siteMetadata={siteMetadata}
         />
       </div>

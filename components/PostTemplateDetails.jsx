@@ -28,13 +28,13 @@ const PostTemplateDetails = ({ post, pages, categories, siteMetadata }) => {
             className="longform drop"
             dangerouslySetInnerHTML={{ __html: `${content}<hr />` }}
           />
-          {tags.length ? (
+          {tags.edges.length ? (
             <div className="container container--narrow">
               Tags:{' '}
-              {tags.map(tag => (
-                <Link href={`/tag/${_.kebabCase(tag)}`}>
+              {tags.edges.map(({ node }) => (
+                <Link href="/tag/[tag]" as={`/tag/${_.kebabCase(node.name)}`}>
                   <a className="button" style={{ marginRight: '.25rem' }}>
-                    {tag}
+                    {node.name}
                   </a>
                 </Link>
               ))}
