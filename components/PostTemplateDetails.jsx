@@ -1,36 +1,26 @@
-import React from "react";
+import React from 'react';
 
-import _ from "lodash";
-import Link from "next/link";
-import Header from "./Header";
-import Categories from "./Categories";
-import Footer from "./Footer";
+import _ from 'lodash';
+import Link from 'next/link';
+import Header from './Header';
+import Categories from './Categories';
+import Footer from './Footer';
 
-const PostTemplateDetails = (props) => {
-  const { site, wpPost, allWpCategory, allWpPage } = props.data;
-  const { menu, author, adminUrl, rss } = site.siteMetadata;
-  const { name } = author;
-  const { title, date, content, featuredImage } = wpPost;
+const PostTemplateDetails = ({ post, pages, categories, siteMetadata }) => {
+  const { menu, author, adminUrl, rss } = siteMetadata;
+  const { title, content, featuredMedia, date, description, tags } = post;
 
-  const categoryNames = allWpCategory.nodes
-    .map((node) => node.name)
-    .filter((category) => category !== "Uncategorized");
-
-  const fullMenu = allWpPage.edges.map((edge) => edge.node).concat(menu);
-  const tags = wpPost.tags.nodes.map((edge) => edge.name);
-
+  const fullMenu = pages.edges.map(edge => edge.node).concat(menu);
   return (
     <>
       <Header
         date={date}
-        background={
-          featuredImage ? featuredImage.node.sourceUrl : "/background.jpg"
-        }
+        background={featuredMedia ? featuredMedia.node.sourceUrl : '/background.jpg'}
         title={title}
-        subtitle={name}
+        subtitle={description}
         menu={fullMenu}
       >
-        <Categories categories={categoryNames} />
+        <Categories categories={categories} />
       </Header>
       <main className="container container--narrow js-blog-posts">
         <article className="post">
@@ -40,10 +30,10 @@ const PostTemplateDetails = (props) => {
           />
           {tags.length ? (
             <div className="container container--narrow">
-              Tags:{" "}
-              {tags.map((tag) => (
+              Tags:{' '}
+              {tags.map(tag => (
                 <Link href={`/tag/${_.kebabCase(tag)}`}>
-                  <a className="button" style={{ marginRight: ".25rem" }}>
+                  <a className="button" style={{ marginRight: '.25rem' }}>
                     {tag}
                   </a>
                 </Link>
@@ -51,8 +41,8 @@ const PostTemplateDetails = (props) => {
             </div>
           ) : null}
           <div className="container container--narrow">
-            <Link href="/" className="button">
-              Read more posts
+            <Link href="/">
+              <a className="button">Read more posts</a>
             </Link>
           </div>
         </article>

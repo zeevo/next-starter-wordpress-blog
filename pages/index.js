@@ -1,20 +1,20 @@
-import React from "react";
-import Head from "next/head";
-import parse from "html-react-parser";
+import React from 'react';
+import Head from 'next/head';
+import parse from 'html-react-parser';
 
-import { createApolloFetch } from "apollo-fetch";
+import { createApolloFetch } from 'apollo-fetch';
 
-import Layout from "../components/Layout";
-import Blog from "../components/Blog";
-import { getSiteMetadata } from "../lib/site";
+import Layout from '../components/Layout';
+import Blog from '../components/Blog';
+import { getSiteMetadata } from '../lib/site';
 
 const IndexRoute = ({ siteMetadata, data }) => {
   const { posts, pages, categories, generalSettings } = data;
   const { title, description } = generalSettings;
 
   const categoryNames = categories.nodes
-    .map((node) => node.name)
-    .filter((name) => name !== "Uncategorized");
+    .map(node => node.name)
+    .filter(name => name !== 'Uncategorized');
 
   return (
     <Layout>

@@ -1,18 +1,18 @@
-import React from "react";
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
 
-const Filter = (props) => {
+const Filter = props => {
   const { topic } = props;
   return (
     <li className="header__tab">
-      <Link href={`/category/${topic.toLowerCase()}`}>
+      <Link href="/category/[category]" as={`/category/${topic.toLowerCase()}`}>
         <a className="header__tab__link faded faded--60">{topic}</a>
       </Link>
     </li>
   );
 };
 
-const Categories = (props) => {
+const Categories = props => {
   const { categories } = props;
   return (
     <div className="header__tabs-wrap">
@@ -23,7 +23,7 @@ const Categories = (props) => {
               <a className="header__tab__link faded faded--60">All</a>
             </Link>
           </li>
-          {categories.map((topic) => (
+          {categories.map(topic => (
             <Filter key={topic} topic={topic} />
           ))}
         </ul>

@@ -10,13 +10,13 @@ import Layout from '../components/Layout';
 import PageTemplateDetails from '../components/PageTemplateDetails';
 import { getPageBySlug } from '../lib/page';
 
-function PageTemplate({ siteMetadata, data, params }) {
+function PageTemplate({ siteMetadata, data }) {
   const { generalSettings, page, pages, categories } = data;
   const { title } = generalSettings;
 
   const categoryNames = categories.nodes
-    .map((node) => node.name)
-    .filter((name) => name !== 'Uncategorized');
+    .map(node => node.name)
+    .filter(name => name !== 'Uncategorized');
 
   return (
     <Layout>
@@ -98,7 +98,7 @@ export const getStaticProps = async ({ params }) => {
 
   return {
     props: {
-      data: { ...res.data, page: page },
+      data: { ...res.data, page },
       siteMetadata,
       params,
     },

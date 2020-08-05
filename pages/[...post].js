@@ -1,35 +1,86 @@
-import React from "react";
-import Head from "next/head";
+import React from 'react';
+import Head from 'next/head';
 
-import parse from "html-react-parser";
+import parse from 'html-react-parser';
+import { request } from 'graphql-request';
 
-import Layout from "../components/Layout";
-import PostTemplateDetails from "../components/PostTemplateDetails";
+import Layout from '../components/Layout';
+import PostTemplateDetails from '../components/PostTemplateDetails';
+import { getPostByUri, getPostPaths } from '../lib/post';
+import { getSiteMetadata } from '../lib/site';
 
-function PostTemplate(props) {
-  const { data, pageContext } = props;
-  const { title } = data.wp.generalSettings;
-  const { category } = pageContext;
+function PostTemplate({ siteMetadata, data }) {
+  const { generalSettings, post, pages, categories } = data;
+  const { title } = generalSettings;
+
+  const categoryNames = categories.nodes
+    .map(node => node.name)
+    .filter(name => name !== 'Uncategorized');
 
   return (
     <Layout>
       <div>
         <Head>
-          <title>{`${category} - ${parse(title)}`}</title>
-          <meta name="description" content={`${title} - ${category}`} />
+          <title>{`${post.title} - ${parse(title)}`}</title>
+          <meta name="description" content={`${title} - ${post}`} />
         </Head>
-        <PostTemplateDetails {...props} />
+        <PostTemplateDetails
+          post={post}
+          pages={pages}
+          categories={categoryNames}
+          siteMetadata={siteMetadata}
+        />
       </div>
     </Layout>
   );
 }
 
-export const getStaticPaths = () => {
+export const getStaticPaths = async () => {
+  const paths = await getPostPaths();
+
   return {
-    paths: [],
+    paths: paths.map(path => {
+      return { params: { post: path.split('/').filter(ele => ele) } };
+    }),
     fallback: false,
   };
 };
-export const getStaticProps = () => {};
+
+export const getStaticProps = async ({ params }) => {
+  const siteMetadata = getSiteMetadata();
+  const uri = siteMetadata.WPGraphQL;
+  const query = /* GraphQL */ `
+    query {
+      generalSettings {
+        title
+        description
+      }
+      pages {
+        edges {
+          node {
+            uri
+            title
+          }
+        }
+      }
+      categories {
+        nodes {
+          name
+        }
+      }
+    }
+  `;
+
+  const appData = await request(uri, query);
+  const post = await getPostByUri(params.post);
+
+  return {
+    props: {
+      data: { ...appData, post },
+      siteMetadata,
+      params,
+    },
+  };
+};
 
 export default PostTemplate;

@@ -7,13 +7,13 @@ const PageTemplateDetails = ({ page, pages, categories, siteMetadata }) => {
   const { menu, author, adminUrl, rss } = siteMetadata;
   const { title, content, featuredMedia } = page;
 
-  const fullMenu = pages.edges.map((edge) => edge.node).concat(menu);
+  const fullMenu = pages.edges.map(edge => edge.node).concat(menu);
 
   return (
     <>
       <Header
         menu={fullMenu}
-        background={featuredMedia ? featuredMedia.source_url : '/background.jpg'}
+        background={featuredMedia ? featuredMedia.node.sourceUrl : '/background.jpg'}
         title={title}
       >
         <Categories categories={categories} />

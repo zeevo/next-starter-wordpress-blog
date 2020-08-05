@@ -14,8 +14,8 @@ function CategoryTemplate({ siteMetadata, data, params }) {
   const { category } = params;
 
   const categoryNames = categories.nodes
-    .map((node) => node.name)
-    .filter((name) => name !== 'Uncategorized');
+    .map(node => node.name)
+    .filter(name => name !== 'Uncategorized');
 
   return (
     <Layout>
@@ -54,8 +54,10 @@ export const getStaticPaths = async () => {
   const { data } = await fetch({ query });
 
   return {
-    paths: data.categories.nodes.map((node) => ({
-      params: { category: node.name.toLowerCase() },
+    paths: data.categories.nodes.map(node => ({
+      params: {
+        category: node.name.toLowerCase(),
+      },
     })),
     fallback: false,
   };
@@ -64,13 +66,26 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }) => {
   const siteMetadata = getSiteMetadata();
   const uri = siteMetadata.WPGraphQL;
-  const query = `
-  query ($tag: String!) {
+  const query = /* GraphQl */ `
+  query ($category: String!) {
     generalSettings {
       title
       description
     }
-    posts(where: {tag: $tag}) {
+    pages {
+      edges {
+        node {
+          uri
+          title
+        }
+      }
+    }
+    categories {
+      nodes {
+        name
+      }
+    }
+    posts(where: {categoryName: $category}) {
       edges {
         node {
           title
@@ -96,26 +111,13 @@ export const getStaticProps = async ({ params }) => {
         }
       }
     }
-    pages {
-      edges {
-        node {
-          uri
-          title
-        }
-      }
-    }
-    categories {
-      nodes {
-        name
-      }
-    }
   }
-`;
+  `;
 
   const fetch = createApolloFetch({ uri });
   const { data } = await fetch({
     query,
-    variables: { tag: params.category },
+    variables: { category: params.category },
   });
 
   return {

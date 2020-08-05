@@ -1,24 +1,17 @@
-import React from "react";
-import parse from "html-react-parser";
+import React from 'react';
+import parse from 'html-react-parser';
 
-import Header from "./Header";
-import Categories from "./Categories";
-import Feed from "./Feed";
-import Footer from "./Footer";
+import Header from './Header';
+import Categories from './Categories';
+import Feed from './Feed';
+import Footer from './Footer';
 
-const Blog = ({
-  posts,
-  pages,
-  categories,
-  siteMetadata,
-  title,
-  description,
-}) => {
+const Blog = ({ posts, pages, categories, siteMetadata, title, description }) => {
   const { menu, author, adminUrl, rss } = siteMetadata;
 
-  const postNodes = posts.edges.map((edge) => edge.node);
+  const postNodes = posts.edges.map(edge => edge.node);
 
-  const fullMenu = pages.edges.map((edge) => edge.node).concat(menu);
+  const fullMenu = pages.edges.map(edge => edge.node).concat(menu);
 
   return (
     <>

@@ -1,12 +1,12 @@
-import React from "react";
-import Head from "next/head";
+import React from 'react';
+import Head from 'next/head';
 
-import parse from "html-react-parser";
+import parse from 'html-react-parser';
+import { request } from 'graphql-request';
 
-import Layout from "../../components/Layout";
-import { getSiteMetadata } from "../../lib/site";
-import { createApolloFetch } from "apollo-fetch";
-import Blog from "../../components/Blog";
+import Layout from '../../components/Layout';
+import { getSiteMetadata } from '../../lib/site';
+import Blog from '../../components/Blog';
 
 function TagTemplate({ siteMetadata, data, params }) {
   const { generalSettings, posts, pages, categories } = data;
@@ -14,14 +14,14 @@ function TagTemplate({ siteMetadata, data, params }) {
   const { category } = params;
 
   const categoryNames = categories.nodes
-    .map((node) => node.name)
-    .filter((name) => name !== "Uncategorized");
+    .map(node => node.name)
+    .filter(name => name !== 'Uncategorized');
 
   return (
     <Layout>
       <div>
         <Head>
-          <title>{`${category} - ${parse(title)}`}</title>
+          <title>{`${params.tag} - ${parse(title)}`}</title>
           <meta name="description" content={`${title} - ${category}`} />
         </Head>
         <Blog
@@ -38,24 +38,25 @@ function TagTemplate({ siteMetadata, data, params }) {
 
 export const getStaticPaths = async () => {
   const siteMetadata = getSiteMetadata();
-  const uri = siteMetadata.WPGraphQL;
+  const wpgraphql = siteMetadata.WPGraphQL;
 
-  const query = `
-  query Categories {
-    categories {
-      nodes {
-        name
+  const query = /* GraphQL */ `
+    query Tags {
+      tags {
+        nodes {
+          name
+        }
       }
     }
-  }
-    `;
+  `;
 
-  const fetch = createApolloFetch({ uri });
-  const { data } = await fetch({ query });
+  const data = await request(wpgraphql, query);
 
   return {
-    paths: data.categories.nodes.map((node) => ({
-      params: { category: node.name.toLowerCase() },
+    paths: data.tags.nodes.map(node => ({
+      params: {
+        tag: node.name.toLowerCase(),
+      },
     })),
     fallback: false,
   };
@@ -63,60 +64,56 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async ({ params }) => {
   const siteMetadata = getSiteMetadata();
-  const uri = siteMetadata.WPGraphQL;
-  const query = `
-  query($category: String!) {
-    generalSettings {
-      title
-      description
-    }
-    posts(where: {categoryName: $category}) {
-      edges {
-        node {
-          title
-          date
-          excerpt
-          slug
-          author {
-            node {
-              name
+  const wpgraphql = siteMetadata.WPGraphQL;
+  const query = /* GraphQL */ `
+    query($tag: String!) {
+      generalSettings {
+        title
+        description
+      }
+      posts(where: { tag: $tag }) {
+        edges {
+          node {
+            title
+            date
+            excerpt
+            slug
+            author {
+              node {
+                name
+              }
             }
-          }
-          categories {
-            nodes {
-              name
+            categories {
+              nodes {
+                name
+              }
             }
-          }
-          featuredImage {
-            node {
-              sourceUrl
-              title
+            featuredImage {
+              node {
+                sourceUrl
+                title
+              }
             }
           }
         }
       }
-    }
-    pages {
-      edges {
-        node {
-          uri
-          title
+      pages {
+        edges {
+          node {
+            uri
+            title
+          }
+        }
+      }
+      categories {
+        nodes {
+          name
         }
       }
     }
-    categories {
-      nodes {
-        name
-      }
-    }
-  }
-`;
+  `;
 
-  const fetch = createApolloFetch({ uri });
-  const { data } = await fetch({
-    query,
-    variables: { category: params.category },
-  });
+  const data = await request(wpgraphql, query, { tag: params.tag });
 
   return {
     props: {
@@ -127,4 +124,4 @@ export const getStaticProps = async ({ params }) => {
   };
 };
 
-export default CategoryTemplate;
+export default TagTemplate;
