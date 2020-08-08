@@ -1,6 +1,17 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next Starter WordPress Blog
+
+### This is a starter project for integrating with WordPress (and WPGraphQL). Use it in conjunction with your own WordPress installation to create great websites.
+
+_Note: Remember to have [WPGraphQL](https://wpgraphql.com) installed in WordPress_
 
 ## Getting Started
+
+First, create a `.env.local` file in the root of the project with the following environment variable
+
+```
+WP_GRAPHQL_URL=https://yourwordpress.com/graphql
+WP_ADMIN_URL=https://yourwordpress.com/wp-admin
+```
 
 First, run the development server:
 

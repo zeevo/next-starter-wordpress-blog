@@ -1,7 +1,7 @@
 const siteConfig = {
   rss: '/rss.xml',
-  WPGraphQL: process.env.WP_ADMIN_URL || 'https://wp.zeevo.me/graphql',
-  adminUrl: process.env.WP_ADMIN_URL || 'https://wp.zeevo.me/wp-login',
+  WPGraphQL: process.env.WP_GRAPHQL_URL,
+  adminUrl: process.env.WP_ADMIN_URL,
   menu: [
     {
       title: 'Twitter',
@@ -14,7 +14,7 @@ const siteConfig = {
     },
   ],
   author: {
-    name: "Shane O'Neill",
+    name: 'You',
     twitter: 'https://twitter.com/zeevosec',
     github: 'https://github.com/zeevosec',
     avatar: '/avatar.png',

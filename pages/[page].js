@@ -37,72 +37,64 @@ function PageTemplate({ siteMetadata, data }) {
 }
 
 export const getStaticPaths = async () => {
-  try {
-    const siteMetadata = getSiteMetadata();
-    const wpgraphql = siteMetadata.WPGraphQL;
+  const siteMetadata = getSiteMetadata();
+  const wpgraphql = siteMetadata.WPGraphQL;
 
-    const query = /* GraphQL */ `
-      {
-        pages {
-          edges {
-            node {
-              id
-              slug
-            }
+  const query = /* GraphQL */ `
+    {
+      pages {
+        edges {
+          node {
+            id
+            slug
           }
         }
       }
-    `;
-    const data = await request(wpgraphql, query);
+    }
+  `;
+  const data = await request(wpgraphql, query);
 
-    return {
-      paths: data.pages.edges.map(({ node }) => {
-        return { params: { page: node.slug } };
-      }),
-      fallback: false,
-    };
-  } catch (e) {
-    console.log(e);
-  }
+  return {
+    paths: data.pages.edges.map(({ node }) => {
+      return { params: { page: node.slug } };
+    }),
+    fallback: false,
+  };
 };
 export const getStaticProps = async ({ params }) => {
-  try {
-    const siteMetadata = getSiteMetadata();
-    const wpgraphql = siteMetadata.WPGraphQL;
-    const query = /* GraphQL */ `
-      query {
-        generalSettings {
-          title
-          description
-        }
-        pages {
-          edges {
-            node {
-              uri
-              title
-            }
-          }
-        }
-        categories {
-          nodes {
-            name
+  const siteMetadata = getSiteMetadata();
+  const wpgraphql = siteMetadata.WPGraphQL;
+  const query = /* GraphQL */ `
+    query {
+      generalSettings {
+        title
+        description
+      }
+      pages {
+        edges {
+          node {
+            uri
+            title
           }
         }
       }
-    `;
+      categories {
+        nodes {
+          name
+        }
+      }
+    }
+  `;
 
-    const data = await request(wpgraphql, query, { id: params.id });
-    const page = await getPageBySlug(params.page);
-    return {
-      props: {
-        data: { ...data, page },
-        siteMetadata,
-        params,
-      },
-    };
-  } catch (e) {
-    console.log(e);
-  }
+  const data = await request(wpgraphql, query, { id: params.id });
+  const page = await getPageBySlug(params.page);
+  return {
+    props: {
+      data: { ...data, page },
+      siteMetadata,
+      params,
+    },
+  };
 };
 
 export default PageTemplate;

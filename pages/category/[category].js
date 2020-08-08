@@ -63,7 +63,6 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }) => {
-  console.log(params);
   const siteMetadata = getSiteMetadata();
   const wpgraphql = siteMetadata.WPGraphQL;
   const query = /* GraphQl */ `
