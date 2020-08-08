@@ -104,7 +104,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
+  content: '';
   content: none;
 }
 table {
@@ -135,7 +135,7 @@ html {
   }
 }
 body {
-  font-family: "adelle-sans", sans-serif;
+  font-family: 'adelle-sans', sans-serif;
   line-height: 1.666667;
   -webkit-font-smoothing: antialiased;
   -font-smoothing: antialiased;
@@ -163,7 +163,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "adelle-sans", sans-serif;
+  font-family: 'adelle-sans', sans-serif;
 }
 h1,
 h2,
@@ -376,7 +376,7 @@ hr {
 }
 .longform .caption {
   font-size: 0.833333em;
-  font-family: "adelle-sans", sans-serif;
+  font-family: 'adelle-sans', sans-serif;
   color: rgba(22, 22, 22, 0.4);
   margin-top: -2.91666725rem;
   margin-bottom: 3.333334rem;
@@ -393,7 +393,7 @@ hr {
 .drop > p:first-of-type:first-letter {
   color: #161616;
   font-size: 5.5em;
-  font-family: "adelle-sans", sans-serif;
+  font-family: 'adelle-sans', sans-serif;
   font-weight: 700;
   line-height: 0.82;
   margin-left: 0;
@@ -418,7 +418,7 @@ hr {
 }
 .footnotes:before {
   display: block;
-  content: "";
+  content: '';
   height: 1px;
   width: 4em;
   background: rgba(22, 22, 22, 0.2);
@@ -572,8 +572,7 @@ hr {
 }
 .hexagon {
   fill: #161616;
-  -webkit-transition: -webkit-transform 400ms
-    cubic-bezier(0.5, 0, 0.5, 1.666667);
+  -webkit-transition: -webkit-transform 400ms cubic-bezier(0.5, 0, 0.5, 1.666667);
   -moz-transition: -moz-transform 400ms cubic-bezier(0.5, 0, 0.5, 1.666667);
   -o-transition: -o-transform 400ms cubic-bezier(0.5, 0, 0.5, 1.666667);
   transition: transform 400ms cubic-bezier(0.5, 0, 0.5, 1.666667);
@@ -609,7 +608,7 @@ hr {
   display: inline-block;
 }
 .footer__social:not(:last-of-type):after {
-  content: ",\00a0";
+  content: ',\00a0';
   color: rgba(22, 22, 22, 0.4);
 }
 .header__item__link {
@@ -845,7 +844,7 @@ input:-ms-input-placeholder {
 input::-webkit-input-placeholder {
   color: inherit;
 }
-input[type="submit"] {
+input[type='submit'] {
   cursor: pointer;
 }
 .post-nav__col {
@@ -867,7 +866,7 @@ input[type="submit"] {
 .button,
 .post__tag__link {
   display: inline-block;
-  font-family: "adelle-sans", sans-serif;
+  font-family: 'adelle-sans', sans-serif;
 }
 .text-center {
   text-align: center;
