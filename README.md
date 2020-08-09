@@ -4,6 +4,8 @@
 
 _Note: Remember to have [WPGraphQL](https://wpgraphql.com) installed in WordPress_
 
+### [Live Demo](https://next-starter-wordpress-blog.netlify.app/)
+
 ## Getting Started
 
 First, create a `.env.local` file in the root of the project with the following environment variable
