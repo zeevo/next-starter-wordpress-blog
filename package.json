@@ -16,7 +16,7 @@
     "graphql-request": "^2.0.0",
     "graphql-tag": "^2.11.0",
     "html-react-parser": "^0.13.0",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "next": "9.5.1",
     "node-fetch": "^2.6.0",
     "react": "16.13.1",
